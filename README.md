@@ -1,4 +1,4 @@
-# ⚙️ Role-based Authentication with Microsoft Login - Laravel
+# ⚙️ Role-based Authentication with Microsoft Login🔐 - Laravel
 
 A Laravel-based authentication system featuring role-based routing and Microsoft OAuth2 login via Laravel Socialite. Users are authenticated based on their role (Admin, SuperAdmin, DeptHead, or User), and redirected accordingly.
 
@@ -112,6 +112,14 @@ Role-based-Authentication/
 
 ---
 
+⚙️ Setup Instructions
+
+#### 1️⃣ Database Configuration
+
+- Create a database in **phpMyAdmin** (e.g., `Role_based_Authentication`)
+- Import the SQL file from `database/import_db/users.sql`
+- Or use Laravel Tinker:
+
 ## 🧪 Laravel Tinker Commands (User Setup)
 
 ### 👉 Create User via Tinker
@@ -136,7 +144,20 @@ $user = User::find(1);
 $user->role = 'manager';
 $user->save();
 ```
+#### 👉  Run the Project
+```bash
+php artisan migrate --seed
+php artisan serve
+```
 
+If the project doesn't work:
+```bash
+composer update
+npm install
+php artisan config:clear
+php artisan view:clear
+php artisan route:clear
+```
 ---
 
 ## 🔐 Microsoft Login Setup on Azure
@@ -158,8 +179,63 @@ MICROSOFT_CLIENT_ID=your-client-id
 MICROSOFT_CLIENT_SECRET=your-secret
 MICROSOFT_REDIRECT_URI=http://localhost:8000/auth/microsoft/callback
 ```
+---
+
+### 🔐 Microsoft OAuth Integration Steps
+
+#### ✳️ Install Laravel Socialite
+```bash
+composer require laravel/socialite
+```
+
+#### ✳️ Install Microsoft Provider
+```bash
+composer require socialiteproviders/microsoft
+```
+
+#### ✳️ Update `config/services.php`
+```php
+'microsoft' => [
+    'client_id' => env('MICROSOFT_CLIENT_ID'),
+    'client_secret' => env('MICROSOFT_CLIENT_SECRET'),
+    'redirect' => env('MICROSOFT_REDIRECT_URI'),
+],
+```
+
+#### ✳️ Update `.env`
+```
+MICROSOFT_CLIENT_ID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+MICROSOFT_CLIENT_SECRET=your-microsoft-secret-key
+MICROSOFT_REDIRECT_URI=http://localhost:8000/auth/microsoft/callback
+```
+
+#### ✳️ Add Events in `EventServiceProvider.php`
+```php
+protected $listen = [
+    \SocialiteProviders\Manager\SocialiteWasCalled::class => [
+        \SocialiteProviders\Microsoft\MicrosoftExtendSocialite::class.'@handle',
+    ],
+];
+```
+
+#### 🛠 Fix: Microsoft `InvalidStateException`
+On some local machines (like personal laptops), sessions may not persist properly.
+✅ Use stateless login:
+```php
+$mUser = Socialite::driver('microsoft')->stateless()->user();
+```
+
+✅ Ensure your redirect URI is correctly set in Azure:
+> [https://portal.azure.com](https://portal.azure.com) → App Registrations → Authentication → Add Redirect URI:
+```
+http://localhost:8000/auth/microsoft/callback    
 
 ---
+
+### 📢 Notes
+- Default route after login is based on user role (admin, user, etc.)
+- Default password is hashed: `bcrypt('12345678')`
+- Admin dashboard: `/admin`, User dashboard: `/user`, etc.
 
 ## 🔄 Routes Overview
 
@@ -194,6 +270,19 @@ php artisan serve
 
 Then open:  
 👉 `http://localhost:8000`
+
+---
+
+
+### ✨ Icons Legend
+- 📁 = Folder
+- 📄 = File
+- 🔐 = Security/Auth
+- ✳️ = Step
+- ✅ = Solution
+- ⚙️ = Setup/Config
+- 🔁 = Update
+- 📢 = Note
 
 ---
 
