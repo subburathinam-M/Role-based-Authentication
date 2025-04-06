@@ -65,6 +65,16 @@
                             </div>
                         </div>
                     </form>
+
+                <div class="mt-4 text-center">
+                    <a href="{{ url('/auth/microsoft') }}">
+                        <button type="button" class="btn btn-outline-primary">
+                            <img src="https://img.icons8.com/color/16/000000/microsoft.png" />
+                            Login with Microsoft
+                        </button>
+                    </a>
+                </div>
+
                 </div>
             </div>
         </div>

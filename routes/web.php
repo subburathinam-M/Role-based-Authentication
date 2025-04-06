@@ -3,7 +3,8 @@
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
-
+use Laravel\Socialite\Facades\Socialite;
+use App\Http\Controllers\MicrosoftAuthController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -27,9 +28,13 @@ Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('ho
 // Route::post('/login', [AuthController::class, 'login']);
 // Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-
+// Auth login/logout
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+// Microsoft OAuth routes using controller
+Route::get('/auth/microsoft', [MicrosoftAuthController::class, 'redirectToMicrosoft']);
+Route::get('/auth/microsoft/callback', [MicrosoftAuthController::class, 'handleMicrosoftCallback']);
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -50,3 +55,5 @@ Route::middleware(['auth'])->group(function () {
         return view('user.dashboard');
     })->middleware('role:user')->name('user.dashboard');
 });
+
+
