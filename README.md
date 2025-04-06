@@ -237,6 +237,8 @@ http://localhost:8000/auth/microsoft/callback
 - Default password is hashed: `bcrypt('12345678')`
 - Admin dashboard: `/admin`, User dashboard: `/user`, etc.
 
+---
+
 ## 🔄 Routes Overview
 
 | Route                             | Description               |
@@ -260,7 +262,6 @@ php artisan route:clear
 php artisan view:clear
 ```
 
----
 
 ## 🚀 Run the App
 
