@@ -227,8 +227,7 @@ $mUser = Socialite::driver('microsoft')->stateless()->user();
 
 ✅ Ensure your redirect URI is correctly set in Azure:
 > [https://portal.azure.com](https://portal.azure.com) → App Registrations → Authentication → Add Redirect URI:
-```
-http://localhost:8000/auth/microsoft/callback    
+> http://localhost:8000/auth/microsoft/callback    
 
 ---
 
@@ -250,7 +249,7 @@ http://localhost:8000/auth/microsoft/callback
 | `/user`                          | User dashboard            |
 
 ---
-
+```
 ## 💡 Tips
 
 - Make sure your **sessions** are correctly configured.
